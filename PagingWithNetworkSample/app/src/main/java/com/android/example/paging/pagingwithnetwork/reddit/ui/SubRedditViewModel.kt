@@ -24,11 +24,15 @@ import com.android.example.paging.pagingwithnetwork.reddit.repository.RedditPost
 
 class SubRedditViewModel(private val repository: RedditPostRepository) : ViewModel() {
     private val subredditName = MutableLiveData<String>()
+    //这是是构建数据的入口,repository包名下面的
     private val repoResult = map(subredditName) {
         repository.postsOfSubreddit(it, 30)
     }
+    //列表数据
     val posts = switchMap(repoResult, { it.pagedList })!!
+    //网络状态
     val networkState = switchMap(repoResult, { it.networkState })!!
+    //刷新状态
     val refreshState = switchMap(repoResult, { it.refreshState })!!
 
     fun refresh() {
